@@ -1,9 +1,10 @@
-// -----------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-// Hardcode for testing
+// Hardcoded for testing
 let username = "davidhere";
 let chatChannel = "mychat";
 
+// -----------------------------------------------------------------------------
 function getToken() {
     return fetch(`/clientTokenGet.php?clientid=${username}`)
             .then(response => {
@@ -35,7 +36,7 @@ getToken()
             console.log("- Error setting up twilio: ", error) || chatSetupFailed()
         );
 
-// -----------------------------------------------------------------
+// -----------------------------------------------------------------------------
 function getChannelDescriptor(chatClient) {
     return chatClient
             .getPublicChannelDescriptors()
@@ -59,26 +60,6 @@ function getChannelDescriptor(chatClient) {
             .catch(error => console.log("error getting channel", error) || error);
 }
 
-function chatSetupFailed() {
-    let template = $("#new-message").html();
-    template = template.replace(
-            "{{body}}",
-            "<b>Chat Setup Failed. Please Contact Admin.</b>"
-            );
-
-    $(".chat").append(template);
-}
-// -----------------------------------------------------------------
-function onMessageAdded(message) {
-    let template = $("#new-message").html();
-    template = template.replace(
-            "{{body}}",
-            `<b>${message.author}:</b> ${message.body}`
-            );
-
-    $(".chat").append(template);
-}
-
 function chatSetupCompleted() {
     let template = $("#new-message").html();
     template = template.replace(
@@ -89,16 +70,32 @@ function chatSetupCompleted() {
     $(".chat").append(template);
 }
 
+function chatSetupFailed() {
+    let template = $("#new-message").html();
+    template = template.replace(
+            "{{body}}",
+            "<b>Chat Setup Failed. Please Contact Admin.</b>"
+            );
+
+    $(".chat").append(template);
+}
+
+function onMessageAdded(message) {
+    let template = $("#new-message").html();
+    template = template.replace(
+            "{{body}}",
+            `<b>${message.author}:</b> ${message.body}`
+            );
+    $(".chat").append(template);
+}
+
 function activateChatBox() {
     $("#message").removeAttr("disabled");
     $("#btn-chat").click(function () {
         const message = $("#message").val();
         $("#message").val("");
-
-        //send message
         chatChannel.sendMessage(message);
     });
-
     $("#message").on("keydown", function (e) {
         if (e.keyCode === 13) {
             $("#btn-chat").click();
@@ -106,15 +103,4 @@ function activateChatBox() {
     });
 }
 
-// -----------------------------------------------------------------
-$(document).ready(function () {
-//    let chatChannel = "mychat";
-//    let username = null;
-//    while (!username) {
-//        getUsername();
-//    }
-//    function getUsername() {
-//        username = prompt("Enter a username");
-//    }
-});
-
+// -----------------------------------------------------------------------------
