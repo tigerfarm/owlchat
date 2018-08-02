@@ -1,7 +1,8 @@
 // -----------------------------------------------------------------
 
 // Hardcode for testing
-let username = "stacyhere";
+let username = "davidhere";
+let chatChannel = "mychat";
 
 function getToken() {
     return fetch(`/clientTokenGet.php?clientid=${username}`)
@@ -107,7 +108,7 @@ function activateChatBox() {
 
 // -----------------------------------------------------------------
 $(document).ready(function () {
-    let chatChannel = "mychat";
+//    let chatChannel = "mychat";
 //    let username = null;
 //    while (!username) {
 //        getUsername();
