@@ -19,9 +19,10 @@ https://www.twilio.com/console/runtime/overview
 - Twilio account. A free Trial account will work.
 - To run locally on your computer using the include web server, install Node.JS and the Twilio Node.JS helper library.
 
-## Implementation to use the Owl Chat Web Application
+## Twilio Console Configuration
 
-These are the steps to configure to use Twilio chat client with Owl Chat.
+These are the steps to configure to use the Owl Chat Web Application.
+No development or credit card information required to try Owl Chat.
 
 ````
 + Create a Chat Service:
@@ -34,35 +35,34 @@ https://www.twilio.com/console/chat/runtime/api-keys
 ````
 ++ Use the code in this repository: [generateToken.js](generateToken.js).
 
-## For Development on your localhost computer.
+## For Developer, Steps to run the Owl Chat Web Application on your localhost computer
 
 Download this repository's zip into a working directory and unzip it.
-Create an environment variable that is your Twilio Function Your Runtime Domain.
+Create an environment variable that is your Twilio Function Runtime Domain.
 ````
 + You can view your Your Runtime Domain from here:
 https://www.twilio.com/console/runtime/overview
 
-Run the Node server program:
+Run the Node.JS server program:
 $ node nodeHttpServer.js
 
-Use your browser to go to the chat window:
+Use your browser to go to run chat client:
 http://localhost:8000
 
-Use a text editor to change the username in index.js.
-In another browser, go to the chat window:
+In another browser, run chat client:
 http://localhost:8000
 
-Send messages.
+Send messages between your browsers.
 ````
 
-## Adding more Chat features:
+## Adding Server Side Chat features:
 
-List members of a channel, is a server side request:
+List members of a channel:
 ````
 https://www.twilio.com/docs/chat/rest/members
 ````
 
-Delete a channel of which you are not the creator, is a server side request:
+Delete a channel of which you are not the creator:
 ````
 https://www.twilio.com/docs/chat/rest/channels
 ````
