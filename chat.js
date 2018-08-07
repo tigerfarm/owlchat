@@ -60,6 +60,7 @@ function createChatClient() {
         Twilio.Chat.Client.create(token).then(chatClient => {
             thisChatClient = chatClient;
             logger("Chat client created: thisChatClient: " + thisChatClient);
+            addChatMessage("+ Chat client created for the user: " + clientId);
             thisChatClient.getSubscribedChannels();
             // thisChatClient.getSubscribedChannels().then(joinChatChannel);
         });
@@ -70,25 +71,26 @@ function createChatClient() {
 
 function listChannels() {
     // Documenation: https://www.twilio.com/docs/chat/channels
-    logger("List of public channels (+ uniqueName: friendlyName):");
+    addChatMessage("+ List of public channels (+ uniqueName: friendlyName):");
     thisChatClient.getPublicChannelDescriptors().then(function (paginator) {
         chatChannelNameExist = false;
         for (i = 0; i < paginator.items.length; i++) {
             const channel = paginator.items[i];
             if (channel.uniqueName === chatChannelName) {
                 chatChannelNameExist = true;
-                addChatMessage('+ ' + channel.uniqueName + ": " + channel.friendlyName + " *");
+                addChatMessage('++ ' + channel.uniqueName + ": " + channel.friendlyName + " *");
             } else {
-                addChatMessage('+ ' + channel.uniqueName + ": " + channel.friendlyName);
+                addChatMessage('++ ' + channel.uniqueName + ": " + channel.friendlyName);
             }
         }
-        logger("End list.");
+        addChatMessage("+ End list.");
     });
 }
 
 // -----------------------------------------------------------------------------
 function joinChatChannel() {
     logger("Function: joinChatChannel()");
+    addChatMessage("++ Join the channel: " + chatChannelName);
     thisChatClient.getChannelByUniqueName(chatChannelName)
             .then(function (channel) {
                 thisChannel = channel;
@@ -113,9 +115,19 @@ function joinChatChannel() {
 function joinChannel() {
     // documenation: https://www.twilio.com/docs/chat/channels
     logger('Join the channel: ' + thisChannel.uniqueName);
+    // Need to handle error: Member already exists.
     thisChannel.join().then(function (channel) {
         logger('Joined channel as ' + clientId);
         addChatMessage("+++ Channel joined. You can start chatting.");
+    }).catch(function (err) {
+        logger("- Join failed: " + thisChannel.uniqueName + ', ' + err);
+        // - Join failed: myChannel3, t: Member already exists
+        // However, the following doesn't work:
+        if (err === "t: Member already exists") {
+            addChatMessage("++ You are already joined in the channel.");
+        }
+        // Use this message for now:
+        addChatMessage("- Join failed: " + err);
     });
     // Channel event listener: messages sent to the channel
     thisChannel.on('messageAdded', function (message) {
