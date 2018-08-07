@@ -1,5 +1,16 @@
 # Owl Chat Application
 
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/tigerfarm/owlc)
+
+When you deploy to Heroku, you will be prompted for an app name. 
+The name needs to be unique, example, enter your name+cc (example: davidcc). 
+Click Deploy app. Once the application is deployed, click Manage app. 
+Set Heroku project environment variables by clicking Settings. 
+Click Reveal Config Vars. Add the following key value pair:
+````
+TOKEN_HOST=your_Twilio_Functions_domain (example: about-time-1235.twil.io)
+````
+
 These are the steps to implement a Twilio JavaScript Web Client using Twilio Functions.
 
 ````

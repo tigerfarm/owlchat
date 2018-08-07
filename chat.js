@@ -21,8 +21,8 @@ function activateChatBox() {
     $("#btn-list").click(function () {
         listChannels();
     });
-    $("#btn-disconnect").click(function () {
-        addChatMessage("- Disconnect not available, yet.");
+    $("#btn-delete").click(function () {
+        deleteChannel();
     });
     // --------------------------------
     $("#btn-chat").click(function () {
@@ -46,7 +46,6 @@ function activateChatBox() {
 }
 
 // -----------------------------------------------------------------------------
-
 function createChatClient() {
     clientId = $("#username").val();
     if (clientId === "") {
@@ -77,6 +76,7 @@ function createChatClient() {
     });
 }
 
+// -----------------------------------------------------------------------------
 function listChannels() {
     if (thisChatClient === "") {
         addChatMessage("First, create a Chat Client.");
@@ -87,22 +87,22 @@ function listChannels() {
     // Documenation: https://www.twilio.com/docs/chat/channels
     addChatMessage("+ List of public channels (+ uniqueName: friendlyName):");
     thisChatClient.getPublicChannelDescriptors().then(function (paginator) {
-        chatChannelNameExist = false;
         for (i = 0; i < paginator.items.length; i++) {
             const channel = paginator.items[i];
+            // Doc: https://www.twilio.com/docs/chat/rest/channels
+            let listString = '++ ' + channel.uniqueName + ": " + channel.friendlyName + ": " + channel.createdBy
             if (channel.uniqueName === chatChannelName) {
-                chatChannelNameExist = true;
-                addChatMessage('++ ' + channel.uniqueName + ": " + channel.friendlyName + " *");
-            } else {
-                addChatMessage('++ ' + channel.uniqueName + ": " + channel.friendlyName);
+                listString += " *";
             }
+            addChatMessage(listString);
         }
         addChatMessage("+ End list.");
     });
 }
 
-// -----------------------------------------------------------------------------
-function joinChatChannel() {
+function deleteChannel() {
+    // Can only be deleted by the creator.
+    logger("Function: deleteChannel()");
     if (thisChatClient === "") {
         addChatMessage("First, create a Chat Client.");
         logger("Required: Chat Client.");
@@ -110,11 +110,45 @@ function joinChatChannel() {
     }
     chatChannelName = $("#channelName").val();
     if (chatChannelName === "") {
-        addChatMessage("Enter a Channel name to join.");
+        addChatMessage("Enter a Channel name.");
         logger("Required: Channel name.");
         return;
     }
+    thisChatClient.getChannelByUniqueName(chatChannelName)
+            .then(function (channel) {
+                thisChannel = channel;
+                logger("Channel exists: " + chatChannelName + " : " + thisChannel);
+                thisChannel.delete().then(function (channel) {
+                    addChatMessage('+ Deleted channel: ' + chatChannelName);
+                }).catch(function (err) {
+                    if (thisChannel.createdBy !== clientId) {
+                        addChatMessage("- Can only be deleted by the creator: " + thisChannel.createdBy);
+                    } else {
+                        logger("- Delete failed: " + thisChannel.uniqueName + ', ' + err);
+                        addChatMessage("- Delete failed: " + err);
+                    }
+                });
+                // Handle error: "t: User unauthorized for command"
+            }).catch(function () {
+        logger("Channel doesn't exist.");
+        addChatMessage("- Channel doesn't exist, cannot delete it: " + chatChannelName);
+    });
+}
+
+// -----------------------------------------------------------------------------
+function joinChatChannel() {
     logger("Function: joinChatChannel()");
+    if (thisChatClient === "") {
+        addChatMessage("First, create a Chat Client.");
+        logger("Required: Chat Client.");
+        return;
+    }
+    chatChannelName = $("#channelName").val();
+    if (chatChannelName === "") {
+        addChatMessage("Enter a Channel name.");
+        logger("Required: Channel name.");
+        return;
+    }
     addChatMessage("++ Join the channel: " + chatChannelName);
     thisChatClient.getChannelByUniqueName(chatChannelName)
             .then(function (channel) {
@@ -141,8 +175,13 @@ function joinChatChannel() {
     });
 }
 
+// https://www.twilio.com/docs/chat/channels
+// A channel is no longer visible to the Client
+// thisChatClient.on('channelRemoved', function(channel) {
+//   addChatMessage('+ Channel removed: ' + channel.friendlyName);
+// });
+
 function joinChannel() {
-    // Documenation: https://www.twilio.com/docs/chat/channels
     logger('Join the channel: ' + thisChannel.uniqueName);
     thisChannel.join().then(function (channel) {
         logger('Joined channel as ' + clientId);
@@ -162,9 +201,15 @@ function joinChannel() {
     thisChannel.on('messageAdded', function (message) {
         onMessageAdded(message);
     });
+    // Documenation: https://www.twilio.com/docs/chat/channels
+    // 
     // Set channel event listener: typing started
     // activeChannel.on('typingStarted', function (member) {
     //    console.log("Member started typing: " + member);
+    // });
+    // Set channel event listener: typing ended
+    // myChannel.on('typingEnded', function(member) {
+    //   console.log(member.identity + 'has stopped typing.');
     // });
 }
 
@@ -172,6 +217,7 @@ function onMessageAdded(message) {
     addChatMessage("> " + message.author + " : " + message.body);
 }
 
+// -----------------------------------------------------------------------------
 function logger(message) {
     var aTextarea = document.getElementById('log');
     aTextarea.value += "\n> " + message;
