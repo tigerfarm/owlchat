@@ -19,16 +19,6 @@ function activateChatBox() {
     $("#btn-list").click(function () {
         listChannels();
     });
-    $("#btn-start").click(function () {
-        logger("Start...");
-        clientId = $("#username").val();
-        if (clientId === "") {
-            logger("Username: Required.");
-        } else {
-            logger("Username: " + clientId);
-            startSession();
-        }
-    });
     $("#btn-join").click(function () {
         joinChatChannel();
     });
@@ -47,23 +37,11 @@ function activateChatBox() {
     });
 }
 function chatSetupCompleted() {
-    let template = $("#new-message").html();
-    template = template.replace(
-            "{{body}}",
-            "<b>Chat Setup Completed. You can start chatting.</b>"
-            );
-
-    $(".chat").append(template);
+    addChatMessage("+++ Chat Setup Completed. You can start chatting.");
 }
 
 function chatSetupFailed() {
-    let template = $("#new-message").html();
-    template = template.replace(
-            "{{body}}",
-            "<b>Chat Setup Failed. Please Contact Admin.</b>"
-            );
-
-    $(".chat").append(template);
+    addChatMessage("--- Chat Setup Failed.");
 }
 
 // -----------------------------------------------------------------------------
@@ -88,7 +66,7 @@ function refresh() {
         Twilio.Chat.Client.create(token).then(chatClient => {
             thisChatClient = chatClient;
             logger("Chat client created: thisChatClient: " + thisChatClient);
-            thisChatClient.getSubscribedChannels().then(createOrJoinGeneralChannel);
+            thisChatClient.getSubscribedChannels().then(createOrJoinChannel);
             chatSetupCompleted();
         });
     }).fail(function () {
@@ -105,10 +83,9 @@ function listChannels() {
             const channel = paginator.items[i];
             if (channel.uniqueName === chatChannelName) {
                 chatChannelNameExist = true;
-                thisChannel = channel;
-                logger('+ ' + thisChannel.uniqueName + ": " + thisChannel.friendlyName + " *");
+                addChatMessage('+ ' + thisChannel.uniqueName + ": " + thisChannel.friendlyName + " *");
             } else {
-                logger('+ ' + channel.uniqueName + ": " + channel.friendlyName);
+                addChatMessage('+ ' + channel.uniqueName + ": " + channel.friendlyName);
             }
         }
         logger("End list.");
@@ -119,10 +96,10 @@ function listChannels() {
 function joinChatChannel() {
     logger('Join the channel: ' + thisChannel.uniqueName);
     // logger("thisChatClient.uniqueName: " + thisChatClient.uniqueName);
-    setupChannel();
+    createOrJoinChannel();
 }
 
-function createOrJoinGeneralChannel() {
+function createOrJoinChannel() {
     // Get the general chat channel, which is where all the messages are
     // sent in this simple application
     logger("Join channel: " + chatChannelName);
@@ -158,30 +135,11 @@ function setupChannel() {
     // Listen for new messages sent to the channel
     thisChannel.on('messageAdded', function (message) {
         onMessageAdded(message);
-        // printMessage(message.author, message.body);  // this is better
     });
 }
 
 function onMessageAdded(message) {
-    logger("onMessageAdded...");
-    let template = $("#new-message").html();
-    template = template.replace(
-            "{{body}}",
-            `<b>${message.author}:</b> ${message.body}`
-            );
-    $(".chat").append(template);
-}
-// Better version of onMessageAdded
-function printMessage(fromUser, message) {
-    var $user = $('<span class="username">').text(fromUser + ':');
-    if (fromUser === username) {
-        $user.addClass('me');
-    }
-    var $message = $('<span class="message">').text(message);
-    var $container = $('<div class="message-container">');
-    $container.append($user).append($message);
-    $chatWindow.append($container);
-    $chatWindow.scrollTop($chatWindow[0].scrollHeight);
+    addChatMessage("> " + message.author + " : " + message.body);
 }
 
 // -----------------------------------------------------------------------------
@@ -214,8 +172,14 @@ function logger(message) {
     log.value += "\n> " + message;
     log.scrollTop = log.scrollHeight;
 }
+function addChatMessage(message) {
+    var aChatMessages = document.getElementById('chatMessages');
+    aChatMessages.value += "\n" + message;
+    aChatMessages.scrollTop = aChatMessages.scrollHeight;
+}
 window.onload = function () {
     log.value = "+++ Start.";
+    chatMessages.value = "+++ Ready to refresh and then chat.";
     // setClientId();
     // refresh();
     // doGetToken();

@@ -21,22 +21,22 @@
                         <div class="panel-heading">
                             Owl Chat using Twilio Programmable Chat
                         </div>
-                        <div class="panel-body body-panel">
-                            <ul class="chat"></ul>
+                        <div>
+                            <textarea id="chatMessages" style="width: 600px; height: 200px; margin: 6px;"></textarea>
                         </div>
                         <div class="panel-footer clearfix">
                             <div style="padding: 6px;">
-                            <input id="message" class="form-control" type="text" disabled />
-                            <button class="btn btn-lg" id="btn-refresh" style="background: blue; color: white">Refresh</button>
-                            <button class="btn btn-lg" id="btn-list" style="background: blue; color: white">List Channels</button>
-                            <button class="btn btn-lg" id="btn-start" style="background: blue; color: white">Start</button>
-                            <button class="btn btn-lg" id="btn-join" style="background: blue; color: white">Join</button>
-                            <button class="btn btn-lg" id="btn-stop" style="background: blue; color: white">Disconnect</button>
+                                <input id="message" class="form-control" type="text" disabled />
+                                <button class="btn btn-lg" id="btn-refresh" style="background: blue; color: white">Refresh</button>
+                                <button class="btn btn-lg" id="btn-list" style="background: blue; color: white">List Channels</button>
+                                <button class="btn btn-lg" id="btn-join" style="background: blue; color: white">Join</button>
+                                <button class="btn btn-lg" id="btn-stop" style="background: blue; color: white">Disconnect</button>
+                                <button class="btn btn-lg" id="btn-chat" style="background: blue; color: white">Send</button>
                             </div>
-                            <br/>Username: <input id="username" type="text"/> (not active, yet)
-                            <span class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12" style="margin-top: 10px">
-                                <button class="btn btn-warning btn-lg btn-block" id="btn-chat">Send</button>
-                            </span>
+                            <table>
+                                <tr><td>Username </td><td><input id="username" type="text"/></td></tr>
+                                <tr><td>Channel  </td><td><input id="channelName" type="text"/> (not active, yet)</td></tr>
+                            </table>
                         </div>
                     </div>
                 </div>
