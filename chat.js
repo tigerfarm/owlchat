@@ -12,19 +12,20 @@ chatChannelDescription = "My channel for learning";
 function activateChatBox() {
     $("#message").removeAttr("disabled");
     //
-    $("#btn-refresh").click(function () {
-        logger("Refresh...");
-        refresh();
-    });
-    $("#btn-list").click(function () {
-        listChannels();
+    $("#btn-createChatClient").click(function () {
+        logger("Create Chat Client...");
+        createChatClient();
     });
     $("#btn-join").click(function () {
         joinChatChannel();
     });
+    $("#btn-list").click(function () {
+        listChannels();
+    });
     $("#btn-stop").click(function () {
         logger("Stop no available, yet.");
     });
+    // --------------------------------
     $("#btn-chat").click(function () {
         const message = $("#message").val();
         $("#message").val("");
@@ -35,18 +36,12 @@ function activateChatBox() {
             $("#btn-chat").click();
         }
     });
-}
-function chatSetupCompleted() {
-    addChatMessage("+++ Chat Setup Completed. You can start chatting.");
-}
-
-function chatSetupFailed() {
-    addChatMessage("--- Chat Setup Failed.");
+    // --------------------------------
 }
 
 // -----------------------------------------------------------------------------
 
-function refresh() {
+function createChatClient() {
     clientId = $("#username").val();
     if (clientId === "") {
         logger("Username: Required.");
@@ -55,19 +50,18 @@ function refresh() {
     // Since, programs cannot make an Ajax call to a remote resource,
     // Need to do an Ajax call to a local program that goes and gets the token.
     logger("Refresh the token using client id: " + clientId);
-    //
     var jqxhr = $.get("clientTokenGet.php?clientid=" + clientId, function (token) {
         thisToken = token;
         // logger("thisToken 1:" + thisToken + ":");
         logger("Token refreshed.");
         // -------------------------------
         // Documentation: https://www.twilio.com/docs/chat/initializing-sdk-clients
-        // Didn't work: thisChatClient = new Twilio.Chat.Client.create(token);
+        // I would need to make change to get this to work: thisChatClient = new Twilio.Chat.Client.create(token);
         Twilio.Chat.Client.create(token).then(chatClient => {
             thisChatClient = chatClient;
             logger("Chat client created: thisChatClient: " + thisChatClient);
-            thisChatClient.getSubscribedChannels().then(createOrJoinChannel);
-            chatSetupCompleted();
+            thisChatClient.getSubscribedChannels();
+            // thisChatClient.getSubscribedChannels().then(joinChatChannel);
         });
     }).fail(function () {
         logger("- Error refreshing the token.");
@@ -83,7 +77,7 @@ function listChannels() {
             const channel = paginator.items[i];
             if (channel.uniqueName === chatChannelName) {
                 chatChannelNameExist = true;
-                addChatMessage('+ ' + thisChannel.uniqueName + ": " + thisChannel.friendlyName + " *");
+                addChatMessage('+ ' + channel.uniqueName + ": " + channel.friendlyName + " *");
             } else {
                 addChatMessage('+ ' + channel.uniqueName + ": " + channel.friendlyName);
             }
@@ -94,95 +88,63 @@ function listChannels() {
 
 // -----------------------------------------------------------------------------
 function joinChatChannel() {
-    logger('Join the channel: ' + thisChannel.uniqueName);
-    // logger("thisChatClient.uniqueName: " + thisChatClient.uniqueName);
-    createOrJoinChannel();
-}
-
-function createOrJoinChannel() {
-    // Get the general chat channel, which is where all the messages are
-    // sent in this simple application
-    logger("Join channel: " + chatChannelName);
+    logger("Function: joinChatChannel()");
     thisChatClient.getChannelByUniqueName(chatChannelName)
             .then(function (channel) {
                 thisChannel = channel;
-                logger("Found channel: " + chatChannelName + " : " + thisChannel);
-                setupChannel();
+                logger("Channel exists: " + chatChannelName + " : " + thisChannel);
+                joinChannel();
             }).catch(function () {
-        // If it doesn't exist, let's create it
-        logger('Creating general channel');
+        logger("Channel doesn't exist, created the channel.");
         thisChatClient.createChannel({
             uniqueName: chatChannelName,
-            friendlyName: 'My Chat Channel'
+            friendlyName: chatChannelDescription
         }).then(function (channel) {
-            logger("Created " + chatChannelName + " channel: ");
+            logger("Channel created : " + chatChannelName + " " + chatChannelDescription);
             logger(channel);
             thisChannel = channel;
-            setupChannel();
+            joinChannel();
         }).catch(function (channel) {
-            logger('Channel could not be created:');
-            logger(channel);
+            logger('-- Failed to create the channel: ' + channel);
         });
     });
 }
 
-// Set up channel after it has been found
-function setupChannel() {
+function joinChannel() {
+    // documenation: https://www.twilio.com/docs/chat/channels
     logger('Join the channel: ' + thisChannel.uniqueName);
     thisChannel.join().then(function (channel) {
         logger('Joined channel as ' + clientId);
+        addChatMessage("+++ Channel joined. You can start chatting.");
     });
-    // Listen for new messages sent to the channel
+    // Channel event listener: messages sent to the channel
     thisChannel.on('messageAdded', function (message) {
         onMessageAdded(message);
     });
+    // Channel event listener: typing started 
+    // activeChannel.on('typingStarted', function (member) {
+    //    console.log("Member started typing: " + member);
+    // });
 }
 
 function onMessageAdded(message) {
     addChatMessage("> " + message.author + " : " + message.body);
 }
 
-// -----------------------------------------------------------------------------
-/*
- * From the documenation: https://www.twilio.com/docs/chat/channels
- 
- // Listen for new messages sent to a channel
- myChannel.on('messageAdded', function(message) {
- console.log(message.author, message.body);
- });
- 
- // Set up the listener for the typing started Channel event
- activeChannel.on('typingStarted', function(member) {
- console.log("Member started typing: " + member);
- });
- 
- */
-
-function setClientId() {
-    clientId = $("#username").val();
-    if (clientId === "") {
-        logger("Username: Required.");
-    } else {
-        logger("Username: " + clientId);
-    }
-}
-
 function logger(message) {
-    var log = document.getElementById('log');
-    log.value += "\n> " + message;
-    log.scrollTop = log.scrollHeight;
+    var aTextarea = document.getElementById('log');
+    aTextarea.value += "\n> " + message;
+    aTextarea.scrollTop = aTextarea.scrollHeight;
 }
 function addChatMessage(message) {
-    var aChatMessages = document.getElementById('chatMessages');
-    aChatMessages.value += "\n" + message;
-    aChatMessages.scrollTop = aChatMessages.scrollHeight;
+    var aTextarea = document.getElementById('chatMessages');
+    aTextarea.value += "\n" + message;
+    aTextarea.scrollTop = aTextarea.scrollHeight;
 }
 window.onload = function () {
     log.value = "+++ Start.";
-    chatMessages.value = "+++ Ready to refresh and then chat.";
-    // setClientId();
-    // refresh();
-    // doGetToken();
+    chatMessages.value = "+++ Ready to Create Chat Client, then join a chat channel and chat.";
+    // createChatClient();
     activateChatBox();
 };
 
