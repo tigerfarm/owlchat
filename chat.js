@@ -22,11 +22,18 @@ function activateChatBox() {
         listChannels();
     });
     $("#btn-disconnect").click(function () {
-        logger("Disconnect not available, yet.");
+        addChatMessage("- Disconnect not available, yet.");
     });
     // --------------------------------
     $("#btn-chat").click(function () {
+        if (thisChatClient === "") {
+            addChatMessage("First, create a Chat Client.");
+            return;
+        }
         const message = $("#message").val();
+        if (message === "") {
+            return;
+        }
         $("#message").val("");
         thisChannel.sendMessage(message);
     });
@@ -73,9 +80,10 @@ function createChatClient() {
 function listChannels() {
     if (thisChatClient === "") {
         addChatMessage("First, create a Chat Client.");
-        logger("Required: Channel name.");
+        logger("Required: Chat Client.");
         return;
     }
+    chatChannelName = $("#channelName").val();
     // Documenation: https://www.twilio.com/docs/chat/channels
     addChatMessage("+ List of public channels (+ uniqueName: friendlyName):");
     thisChatClient.getPublicChannelDescriptors().then(function (paginator) {
@@ -95,6 +103,11 @@ function listChannels() {
 
 // -----------------------------------------------------------------------------
 function joinChatChannel() {
+    if (thisChatClient === "") {
+        addChatMessage("First, create a Chat Client.");
+        logger("Required: Chat Client.");
+        return;
+    }
     chatChannelName = $("#channelName").val();
     if (chatChannelName === "") {
         addChatMessage("Enter a Channel name to join.");
