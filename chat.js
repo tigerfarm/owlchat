@@ -1,19 +1,18 @@
 // -----------------------------------------------------------------------------
 
-let thisChatClient;
+let thisChatClient = "";
 let thisChannel;
 let thisToken;
 
 clientId = "";
-chatChannelName = "myChannel3";
-chatChannelDescription = "My channel for learning";
+chatChannelName = "";
+chatChannelDescription = "";
 
 // -----------------------------------------------------------------------------
 function activateChatBox() {
     $("#message").removeAttr("disabled");
     //
     $("#btn-createChatClient").click(function () {
-        logger("Create Chat Client...");
         createChatClient();
     });
     $("#btn-join").click(function () {
@@ -22,8 +21,8 @@ function activateChatBox() {
     $("#btn-list").click(function () {
         listChannels();
     });
-    $("#btn-stop").click(function () {
-        logger("Stop no available, yet.");
+    $("#btn-disconnect").click(function () {
+        logger("Disconnect not available, yet.");
     });
     // --------------------------------
     $("#btn-chat").click(function () {
@@ -44,9 +43,11 @@ function activateChatBox() {
 function createChatClient() {
     clientId = $("#username").val();
     if (clientId === "") {
-        logger("Username: Required.");
+        logger("Required: Username.");
+        addChatMessage("Enter a Username to use when chatting.");
         return;
     }
+    addChatMessage("++ Creating Chat Client, please wait.");
     // Since, programs cannot make an Ajax call to a remote resource,
     // Need to do an Ajax call to a local program that goes and gets the token.
     logger("Refresh the token using client id: " + clientId);
@@ -70,6 +71,11 @@ function createChatClient() {
 }
 
 function listChannels() {
+    if (thisChatClient === "") {
+        addChatMessage("First, create a Chat Client.");
+        logger("Required: Channel name.");
+        return;
+    }
     // Documenation: https://www.twilio.com/docs/chat/channels
     addChatMessage("+ List of public channels (+ uniqueName: friendlyName):");
     thisChatClient.getPublicChannelDescriptors().then(function (paginator) {
@@ -89,6 +95,12 @@ function listChannels() {
 
 // -----------------------------------------------------------------------------
 function joinChatChannel() {
+    chatChannelName = $("#channelName").val();
+    if (chatChannelName === "") {
+        addChatMessage("Enter a Channel name to join.");
+        logger("Required: Channel name.");
+        return;
+    }
     logger("Function: joinChatChannel()");
     addChatMessage("++ Join the channel: " + chatChannelName);
     thisChatClient.getChannelByUniqueName(chatChannelName)
@@ -98,6 +110,10 @@ function joinChatChannel() {
                 joinChannel();
             }).catch(function () {
         logger("Channel doesn't exist, created the channel.");
+        chatChannelDescription = $("#channelDescription").val();
+        if (chatChannelDescription === "") {
+            chatChannelDescription = chatChannelName;
+        }
         thisChatClient.createChannel({
             uniqueName: chatChannelName,
             friendlyName: chatChannelDescription
@@ -113,14 +129,14 @@ function joinChatChannel() {
 }
 
 function joinChannel() {
-    // documenation: https://www.twilio.com/docs/chat/channels
+    // Documenation: https://www.twilio.com/docs/chat/channels
     logger('Join the channel: ' + thisChannel.uniqueName);
-    // Need to handle error: Member already exists.
     thisChannel.join().then(function (channel) {
         logger('Joined channel as ' + clientId);
         addChatMessage("+++ Channel joined. You can start chatting.");
     }).catch(function (err) {
         logger("- Join failed: " + thisChannel.uniqueName + ', ' + err);
+        //
         // - Join failed: myChannel3, t: Member already exists
         // However, the following doesn't work:
         if (err === "t: Member already exists") {
