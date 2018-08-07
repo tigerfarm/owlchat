@@ -101,7 +101,6 @@ function listChannels() {
 }
 
 function deleteChannel() {
-    // Can only be deleted by the creator.
     logger("Function: deleteChannel()");
     if (thisChatClient === "") {
         addChatMessage("First, create a Chat Client.");
@@ -123,12 +122,12 @@ function deleteChannel() {
                 }).catch(function (err) {
                     if (thisChannel.createdBy !== clientId) {
                         addChatMessage("- Can only be deleted by the creator: " + thisChannel.createdBy);
+                        // Server side delete: https://www.twilio.com/docs/chat/rest/channels
                     } else {
                         logger("- Delete failed: " + thisChannel.uniqueName + ', ' + err);
                         addChatMessage("- Delete failed: " + err);
                     }
                 });
-                // Handle error: "t: User unauthorized for command"
             }).catch(function () {
         logger("Channel doesn't exist.");
         addChatMessage("- Channel doesn't exist, cannot delete it: " + chatChannelName);
