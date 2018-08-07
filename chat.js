@@ -129,11 +129,11 @@ function joinChannel() {
         // Use this message for now:
         addChatMessage("- Join failed: " + err);
     });
-    // Channel event listener: messages sent to the channel
+    // Set channel event listener: messages sent to the channel
     thisChannel.on('messageAdded', function (message) {
         onMessageAdded(message);
     });
-    // Channel event listener: typing started 
+    // Set channel event listener: typing started
     // activeChannel.on('typingStarted', function (member) {
     //    console.log("Member started typing: " + member);
     // });
