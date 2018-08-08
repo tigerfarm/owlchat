@@ -8,12 +8,17 @@ Click Deploy app. Once the application is deployed, click Manage app.
 Set Heroku project environment variables by clicking Settings. 
 Click Reveal Config Vars. Add the following key value pair:
 ````
-TOKEN_HOST=your_Twilio_Functions_domain (example: about-time-1235.twil.io)
+TOKEN_HOST=your_Twilio_Functions_runtime_domain (example: about-time-1235.twil.io)
 ````
 You can view your Your Runtime Domain from here:
 ````
 https://www.twilio.com/console/runtime/overview
 ````
+
+Owl Chat Screen print:
+
+<img src="ScreenPrint.jpg"/>
+
 ### Requirements:
 
 - Twilio account. A free Trial account will work.
