@@ -1,8 +1,19 @@
 /* -------------------------------------------------------------------------- */
+.panelTitle
+{
+    color: white;
+    background: #F73550;
+    padding: 9px;
+}
+.panelArea
+{
+    margin-top: 6px;
+}
+/* -------------------------------------------------------------------------- */
 #chatBox
 {
     margin-top: 6px;
-    height: 460px;
+    height: 443px;
     width: 624px;
     border: solid tomato;
     margin-left: 15px;
@@ -28,7 +39,7 @@ input {
 /* -------------------------------------------------------------------------- */
 #logBox
 {
-    height: 266px;
+    height: 220px;
     width: 624px; 
     border: solid tomato;
     margin-top: 6px;
@@ -39,7 +50,7 @@ input {
 }
 #log
 {
-    height: 200px; 
+    height: 100px; 
     width: 600px;
     margin: 3px;
     padding: 3px;

@@ -10,14 +10,14 @@
     </head>
     <body>
         <div id="chatBox">
-            <div class="panel-heading" style="color: white; background: #F73550;">
+            <div class="panelTitle">
                 Owl Chat using Twilio Programmable Chat
             </div>
-            <div style="margin-top: 6px;">
+            <div class="panelArea">
                 <textarea id="chatMessages"></textarea>
             </div>
-            <div>
-                <input id="message" class="form-control" type="text" disabled style="margin-bottom: 6px;"/>
+            <div class="panelArea">
+                <input id="message" class="form-control" type="text" disabled/>
             </div>
             <div style="margin-top: 6px;">
                 <table>
@@ -30,7 +30,7 @@
                     </tr>
                 </table>
             </div>
-            <div style="margin-top: 6px;">
+            <div class="panelArea">
                 <table>
                     <tr><td>Username </td><td><input id="username" type="text"/></td><td id="cUsername"></td></tr>
                     <tr><td>Channel name </td><td><input id="channelName" type="text"/></td></tr>
@@ -39,12 +39,19 @@
             </div>
         </div>
         <div id="logBox">
-            <textarea id="log"></textarea>
-            <table>
-                <tr>
-                    <td><button id="clearLog" onclick="clearLog();">Clear</button></td>
-                </tr>
-            </table>
+            <div class="panelTitle">
+                Log messages for developers
+            </div>
+            <div class="panelArea">
+                <textarea id="log"></textarea>
+            </div>
+            <div class="panelArea">
+                <table>
+                    <tr>
+                        <td><button id="clearLog" onclick="clearLog();">Clear</button></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </body>
 </html>
