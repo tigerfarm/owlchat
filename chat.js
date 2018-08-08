@@ -222,6 +222,10 @@ function logger(message) {
     aTextarea.value += "\n> " + message;
     aTextarea.scrollTop = aTextarea.scrollHeight;
 }
+function clearLog() {
+    log.value = "+ Ready";
+}
+
 function addChatMessage(message) {
     var aTextarea = document.getElementById('chatMessages');
     aTextarea.value += "\n" + message;
