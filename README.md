@@ -3,7 +3,7 @@
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/tigerfarm/owlchat)
 
 When you deploy to Heroku, you will be prompted for an app name. 
-The name needs to be unique, example, enter your name+cc (example: davidhero). 
+The name needs to be unique. Example, use your name+hero (example: davidhero). 
 Click Deploy app. Once the application is deployed, click Manage app. 
 Set Heroku project environment variables by clicking Settings. 
 Click Reveal Config Vars. Add the following key value pair:
@@ -43,30 +43,32 @@ Owl Chat Screen print:
 These are the steps to configure to use the Owl Chat Web Application.
 No development or credit card information required to try Owl Chat.
 
-Create a Chat Service:
+1. Create a Chat Service:
 
 [https://www.twilio.com/console/chat/dashboard](https://www.twilio.com/console/chat/dashboard)
 
-Create an API key and secret string:
+2. Create an API key and secret string:
 
 [https://www.twilio.com/console/chat/runtime/api-keys](https://www.twilio.com/console/chat/runtime/api-keys)
 
-Create a Twilio Function to generate access tokens:
+3. Create a Twilio Function to generate access tokens:
 
 [https://www.twilio.com/console/runtime/functions/manage](https://www.twilio.com/console/runtime/functions/manage)
 ````
 Friendly name: Generate access token - Chat
-Path: /tokenchat
+Path: /tokenchat (This path name is used in other programs)
 ````
-Code: use the code in this repository: [generateToken.js](generateToken.js).
+Code: use the code in this repository file: [generateToken.js](generateToken.js).
 
 Note, the Function URL (https://Function-Runtime-Domain/tokenchat) is used in clientTokenGet.php and nodeHttpServer.js.
 
-Configure your Twilio Function with environment variables:
+4. Configure your Twilio Function environment variables:
 
 [https://www.twilio.com/console/runtime/functions/configure](https://www.twilio.com/console/runtime/functions/configure)
 ````
-Add environment variables:
+4.1 Enable ACCOUNT_SID and AUTH_TOKEN. This allows your Twilio Function to use your ACCOUNT_SID.
+
+4.2 Add environment variables:
 CHAT_SERVICE_SID    : your_value_as_created_above
 CHAT_API_KEY        : your_value_as_created_above
 CHAT_API_KEY_SECRET : your_value_as_created_above
