@@ -38,15 +38,18 @@ https://www.twilio.com/console/runtime/overview
 These are the steps to configure to use the Owl Chat Web Application.
 No development or credit card information required to try Owl Chat.
 
-````
 Create a Chat Service:
-[https://www.twilio.com/console/chat/dashboard](https://www.twilio.com/console/chat/dashboard)
+
+    [https://www.twilio.com/console/chat/dashboard](https://www.twilio.com/console/chat/dashboard)
 
 Create an API key and secret string:
-[https://www.twilio.com/console/chat/runtime/api-keys](https://www.twilio.com/console/chat/runtime/api-keys)
+
+    [https://www.twilio.com/console/chat/runtime/api-keys](https://www.twilio.com/console/chat/runtime/api-keys)
 
 Create a Twilio Function to generate access tokens:
-[https://www.twilio.com/console/runtime/functions/manage](https://www.twilio.com/console/runtime/functions/manage)
+
+    [https://www.twilio.com/console/runtime/functions/manage](https://www.twilio.com/console/runtime/functions/manage)
+````
 Friendly name: Generate access token - Chat
 Path: /tokenchat
 ````
@@ -56,11 +59,12 @@ Note, the Function URL (https://<Function Runtime Domain>/tokenchat) is used in 
 
 Configure your Twilio Function with environment variables:
 [https://www.twilio.com/console/runtime/functions/configure](https://www.twilio.com/console/runtime/functions/configure)
+````
 Add environment variables:
 CHAT_SERVICE_SID    : your_value_as-created_above
 CHAT_API_KEY        : your_value_as-created_above
 CHAT_API_KEY_SECRET : your_value_as-created_above
-
+````
 ## For Developer, Steps to run the Owl Chat Web Application on your localhost computer
 
 Download this repository's zip into a working directory and unzip it.
