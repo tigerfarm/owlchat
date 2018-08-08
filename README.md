@@ -55,16 +55,16 @@ Path: /tokenchat
 ````
 Code: use the code in this repository: [generateToken.js](generateToken.js).
 
-Note, the Function URL (https://<Function Runtime Domain>/tokenchat) is used in clientTokenGet.php and nodeHttpServer.js.
+Note, the Function URL (https://Function-Runtime-Domain/tokenchat) is used in clientTokenGet.php and nodeHttpServer.js.
 
 Configure your Twilio Function with environment variables:
 
 [https://www.twilio.com/console/runtime/functions/configure](https://www.twilio.com/console/runtime/functions/configure)
 ````
 Add environment variables:
-CHAT_SERVICE_SID    : your_value_as-created_above
-CHAT_API_KEY        : your_value_as-created_above
-CHAT_API_KEY_SECRET : your_value_as-created_above
+CHAT_SERVICE_SID    : your_value_as_created_above
+CHAT_API_KEY        : your_value_as_created_above
+CHAT_API_KEY_SECRET : your_value_as_created_above
 ````
 ## For Developer, Steps to run the Owl Chat Web Application on your localhost computer
 
