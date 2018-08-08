@@ -65,10 +65,11 @@ Note, the Function URL (https://Function-Runtime-Domain/tokenchat) is used in cl
 4. Configure your Twilio Function environment variables:
 
 [https://www.twilio.com/console/runtime/functions/configure](https://www.twilio.com/console/runtime/functions/configure)
-````
+
 4.1 Enable ACCOUNT_SID and AUTH_TOKEN. This allows your Twilio Function to use your ACCOUNT_SID.
 
 4.2 Add environment variables:
+````
 CHAT_SERVICE_SID    : your_value_as_created_above
 CHAT_API_KEY        : your_value_as_created_above
 CHAT_API_KEY_SECRET : your_value_as_created_above
