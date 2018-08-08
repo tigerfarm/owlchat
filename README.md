@@ -19,43 +19,68 @@ https://www.twilio.com/console/runtime/overview
 - Twilio account. A free Trial account will work.
 - To run locally on your computer using the include web server, install Node.JS and the Twilio Node.JS helper library.
 
+## Files
+
+- [index.html](index.html) : Chat client HTML
+- [chat.css](chat.css) : Chat client styles, CSS
+- [chat.js](chat.js) : Chat client JavaScript
+- [clientTokenGet.php](clientTokenGet.php) : a program that calls your Twilio Function (generateToken.js).
+  This is used when hosting the client remotely on a public PHP capable website.
+- [generateToken.js](generateToken.js) : generates and returns an access token.
+- [nodeHttpServer.js](nodeHttpServer.js) : a NodeJS HTTP Server that serves the Chat client files and calls your Twilio Function (generateToken.js).
+  This is used to run the client locally on a computer.
+- [echoVars.php](echoVars.php) : Echo your environment variables that are used in clientTokenGet.php.
+- [app.json](app.json) : Heroku deployment file to describe the application.
+- [composer.json](composer.json) : Heroku deployment file which sets the programming language used.
+
 ## Twilio Console Configuration
 
 These are the steps to configure to use the Owl Chat Web Application.
 No development or credit card information required to try Owl Chat.
 
 ````
-+ Create a Chat Service:
+Create a Chat Service:
 https://www.twilio.com/console/chat/dashboard
 
-+ Create an API key and secret string:
+Create an API key and secret string:
 https://www.twilio.com/console/chat/runtime/api-keys
 
-+ Create a Twilio Function to create Chat access tokens.
+Create a Twilio Function to generate access tokens:
+Friendly name: Generate access token - Chat
+Path: /tokenchat
 ````
-++ Use the code in this repository: [generateToken.js](generateToken.js).
+Code: use the code in this repository: [generateToken.js](generateToken.js).
+
+Note, the Function URL (https://<Function Runtime Domain>/tokenchat) is used in clientTokenGet.php and nodeHttpServer.js.
 
 ## For Developer, Steps to run the Owl Chat Web Application on your localhost computer
 
 Download this repository's zip into a working directory and unzip it.
 Create an environment variable that is your Twilio Function Runtime Domain.
+Example:
 ````
-+ You can view your Your Runtime Domain from here:
+$ export TOKEN_HOST about-time-1235.twil.io
+
+You can view your Your Runtime Domain from here:
 https://www.twilio.com/console/runtime/overview
 
 Run the Node.JS server program:
 $ node nodeHttpServer.js
 
-Use your browser to go to run chat client:
+Use your browser to go to run the chat client:
 http://localhost:8000
+Enter a username, example: stacy.
+Enter a Channel name and description, example: mychannel, My test channel.
 
-In another browser, run chat client:
+In another browser tab, run another chat client using a different username, same channel name:
 http://localhost:8000
+Enter a username, example: david.
+Enter a Channel name and description, example: mychannel.
 
-Send messages between your browsers.
+Send messages between your clients.
 ````
 
-## Adding Server Side Chat features:
+## Future options: Add Server Side Chat features:
 
 List members of a channel:
 ````
