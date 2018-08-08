@@ -74,29 +74,35 @@ CHAT_SERVICE_SID    : your_value_as_created_above
 CHAT_API_KEY        : your_value_as_created_above
 CHAT_API_KEY_SECRET : your_value_as_created_above
 ````
-## For Developer, Steps to run the Owl Chat Web Application on your localhost computer
+## For Developers
+
+Following are the steps to run the Owl Chat Web Application on your localhost computer.
 
 Download this repository's zip into a working directory and unzip it.
 Create an environment variable that is your Twilio Function Runtime Domain.
 Example:
 ````
 $ export TOKEN_HOST about-time-1235.twil.io
-
+````
 You can view your Your Runtime Domain from here:
+````
 https://www.twilio.com/console/runtime/overview
-
+````
 Run the Node.JS server program:
+````
 $ node nodeHttpServer.js
-
-Use your browser to go to run the chat client:
+````
+### Test
+````
+Use your browser to run the chat client:
 http://localhost:8000
 Enter a username, example: stacy.
-Enter a Channel name and description, example: mychannel, My test channel.
+Enter a Channel name and description, example: "mychannel" and "My test channel".
 
-In another browser tab, run another chat client using a different username, same channel name:
+In another browser tab, run another chat client using a , same channel name:
 http://localhost:8000
-Enter a username, example: david.
-Enter a Channel name and description, example: mychannel.
+Enter a username, example: david (different username).
+Enter a Channel name, example: mychannel (same as the other client).
 
 Send messages between your clients.
 ````
