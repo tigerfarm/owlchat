@@ -164,8 +164,7 @@ function joinChatChannel() {
             uniqueName: chatChannelName,
             friendlyName: chatChannelDescription
         }).then(function (channel) {
-            logger("Channel created : " + chatChannelName + " " + chatChannelDescription);
-            logger(channel);
+            logger("Channel created : " + chatChannelName + " " + chatChannelDescription + " : " + channel);
             thisChannel = channel;
             joinChannel();
         }).catch(function (channel) {

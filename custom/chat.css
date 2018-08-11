@@ -1,24 +1,44 @@
 /* -------------------------------------------------------------------------- */
+#topBar {
+    width: 780px;
+    margin: 6px 0px 0px 18px;
+    padding: 0px 0px 0px 0px;
+}
+#bottomBar {
+    width: 627px;
+    margin: 6px 0px 0px 15px;
+    padding: 6px 0px 20px 0px;
+    font: Helvetica,Arial,sans-serif;
+    font-size: 14px; 
+    text-align: center;
+    color: rgba(255,255,255,.65); 
+    background-color: #080A30;
+}
+h1 {
+    margin: 0;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+    font-family: Times, "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 3em;
+}
+/* -------------------------------------------------------------------------- */
 .panelTitle
 {
     color: white;
     background: #F73550;
     padding: 9px;
+    font: Helvetica,Arial,sans-serif;
+    font-size: 14px; 
 }
 .panelArea
 {
     margin-top: 6px;
 }
-#GitHubLink
-{
-    margin-top: 6px;
-    margin-left: 18px;
-}
 /* -------------------------------------------------------------------------- */
 #chatBox
 {
     margin-top: 6px;
-    height: 443px;
+    height: 433px;
     width: 624px;
     border: solid tomato;
     margin-left: 15px;
@@ -44,7 +64,7 @@ input {
 /* -------------------------------------------------------------------------- */
 #logBox
 {
-    height: 220px;
+    height: 203px;
     width: 624px; 
     border: solid tomato;
     margin-top: 6px;
@@ -69,10 +89,12 @@ button#btn-delete,
 button#btn-chat,
 button#clearLog {
     width: 90px;
-    height: 40px;
+    height: 30px;
     border-radius: 9px;
     color: white;
     background-color: #F73550;
+    font: Helvetica,Arial,sans-serif;
+    font-size: 14px; 
 }
 button#btn-createChatClient,
 button#btn-list {
