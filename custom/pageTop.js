@@ -5,9 +5,17 @@ document.write('<td><h1>Owl Chat</h1></td>');
 
 document.write('<td>');
 document.write('<div class="menuicon" onclick="menuicon()" style="margin: 9px 0 0 300px;">');
-document.write('    <div class="bar1"></div>');
-document.write('    <div class="bar2"></div>');
-document.write('    <div class="bar3"></div>');
+document.write('    <div class="bar1" onclick="menubar()"></div>');
+document.write('    <div class="bar2" onclick="menubar()"></div>');
+document.write('    <div class="bar3" onclick="menubar()"></div>');
+document.write('</div>');
+document.write('<div class="menuDropdown">');
+document.write('<div id="menuDropdownItems" class="menuDropdownList">');
+document.write('    <a href="#">Voice Client</a>');
+document.write('    <a href="#">TaskRouter</a>');
+document.write('    <a href="#">Video</a>');
+document.write('    <a href="#">SMS</a>');
+document.write('</div>');
 document.write('</div>');
 document.write('</td>');
 
