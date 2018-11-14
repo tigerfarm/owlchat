@@ -154,6 +154,9 @@ function joinChatChannel() {
                 thisChannel = channel;
                 logger("Channel exists: " + chatChannelName + " : " + thisChannel);
                 joinChannel();
+                //
+                addChatMessage("+ getAttributes: " + channel.getAttributes() + " name: " + channel.getAttributes().friendlyName);
+                //
             }).catch(function () {
         logger("Channel doesn't exist, created the channel.");
         chatChannelDescription = $("#channelDescription").val();
