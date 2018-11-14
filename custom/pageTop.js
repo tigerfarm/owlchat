@@ -1,7 +1,7 @@
 document.write('<div id="topBar">');
 document.write('<table><tr>');
 document.write('<td><a href="/index.html"><img src="custom/companyLogo.jpg" alt="Twilio" style="width:120px; padding-right: 30px;"/></a></td>');
-document.write('<td><h1>Tiger Chat</h1></td>');
+document.write('<td><h1>Tiger Farm Press Chat</h1></td>');
 
 document.write('<td>');
 document.write('<div class="menuicon" onclick="menuicon()" style="margin: 9px 0 0 300px;">');
