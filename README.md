@@ -1,4 +1,7 @@
-# Owl Chat Application
+# Tiger Farm Press Chat Application
+
+If you would like an Heroku account to deploy and use this web application,
+go to this [link (https://heroku.com)](https://heroku.com) and you can Sign up for free, and use it for free.
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/tigerfarm/owlchat)
 
@@ -15,7 +18,7 @@ You can view your Your Runtime Domain from here:
 https://www.twilio.com/console/runtime/overview
 ````
 
-Owl Chat Screen print:
+Tiger Farm Press Chat Screen print:
 
 <img src="ScreenPrint.jpg"/>
 
@@ -40,8 +43,8 @@ Owl Chat Screen print:
 
 ## Twilio Console Configuration
 
-These are the steps to configure to use the Owl Chat Web Application.
-No development or credit card information required to try Owl Chat.
+These are the steps to configure to use the Chat Web Application.
+No development or credit card information required to try Chat.
 
 1. Create a Chat Service:
 
@@ -76,7 +79,7 @@ CHAT_API_KEY_SECRET : your_value_as_created_above
 ````
 ## For Developers
 
-Following are the steps to run the Owl Chat Web Application on your localhost computer.
+Following are the steps to run the Chat Web Application on your localhost computer.
 
 Download this repository's zip into a working directory and unzip it.
 Create an environment variable that is your Twilio Function Runtime Domain.
