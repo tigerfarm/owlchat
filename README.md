@@ -20,7 +20,7 @@ https://www.twilio.com/console/runtime/overview
 
 Tiger Farm Press Chat Screen print:
 
-<img src="ScreenPrint.jpg"/>
+<img src="Tiger_Chat.jpg"/>
 
 ### Requirements:
 
