@@ -244,6 +244,7 @@ window.onclick = function (e) {
     theBar = 0;
 }
 
+// -----------------------------------------------------------------------------
 function logger(message) {
     var aTextarea = document.getElementById('log');
     aTextarea.value += "\n> " + message;
