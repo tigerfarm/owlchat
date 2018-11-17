@@ -4,7 +4,7 @@ document.write('<td><a href="/index.html"><img src="custom/companyLogo.jpg" alt=
 document.write('<td><h1>Tiger Farm Press Chat</h1></td>');
 
 document.write('<td>');
-document.write('<div class="menuicon" onclick="menuicon()" style="margin: 9px 0 0 300px;">');
+document.write('<div class="menuicon" onclick="menuicon()" style="margin: 9px 0 0 160px;">');
 document.write('    <div class="bar1" onclick="menubar()"></div>');
 document.write('    <div class="bar2" onclick="menubar()"></div>');
 document.write('    <div class="bar3" onclick="menubar()"></div>');

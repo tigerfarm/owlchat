@@ -155,7 +155,7 @@ function joinChatChannel() {
                 logger("Channel exists: " + chatChannelName + " : " + thisChannel);
                 joinChannel();
                 //
-                addChatMessage("+ getAttributes: " + channel.getAttributes() + " name: " + channel.getAttributes().friendlyName);
+                // addChatMessage("+ getAttributes: " + channel.getAttributes() + " name: " + channel.getAttributes().friendlyName);
                 //
             }).catch(function () {
         logger("Channel doesn't exist, created the channel.");
@@ -188,15 +188,15 @@ function joinChannel() {
         logger('Joined channel as ' + clientId);
         addChatMessage("+++ Channel joined. You can start chatting.");
     }).catch(function (err) {
-        logger("- Join failed: " + thisChannel.uniqueName + ', ' + err);
-        //
         // - Join failed: myChannel3, t: Member already exists
-        // However, the following doesn't work:
-        if (err === "t: Member already exists") {
-            addChatMessage("++ You are already joined in the channel.");
+        if (err.message === "Member already exists") {
+            // - Join failed: t: Member already exists
+            addChatMessage("++ You already exist in the channel.");
+        } else {
+            logger("- Join failed: " + thisChannel.uniqueName + ' :' + err.message + ":");
+            addChatMessage("- Join failed: " + err.message);
         }
         // Use this message for now:
-        addChatMessage("- Join failed: " + err);
     });
     // Set channel event listener: messages sent to the channel
     thisChannel.on('messageAdded', function (message) {
