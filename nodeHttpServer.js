@@ -35,7 +35,8 @@ http.createServer(function (request, response) {
             if (theIndex > 0) {
                 tokenHost = request.url.substring(theIndex + theHostnameFieldname.length);
             }
-            theRequest = "https://" + tokenHost + "/tokenchat"+ theParam;
+            // theRequest = "https://" + tokenHost + "/tokenchat"+ theParam;
+            theRequest = "https://" + tokenHost + "/tokenchatextra"+ theParam;    // has more variables
             console.log('+ theRequest:', theRequest);
             makeRequest(theRequest, function (theError, theResponse, theToken) {
                 theResponseStatusCode = theResponse && theResponse.statusCode;
