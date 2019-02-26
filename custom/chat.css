@@ -116,7 +116,7 @@ select option {
 }
 
 .abutton {
-    width: 90px;
+    width: 83px;
     height: 40px;
     border-radius: 9px;
     color: white;
@@ -138,7 +138,7 @@ select option {
     border-bottom-color: #3884CF;
 }
 .abutton:disabled {
-    width: 90px;
+    width: 83px;
     height: 40px;
     border-radius: 9px;
     color: white;

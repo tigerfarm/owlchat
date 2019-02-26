@@ -3,85 +3,11 @@
 let thisChatClient = "";
 let thisChannel;
 let thisToken;
+let totalMessages = 0;  // This count of read channel messages need work to initialize and maintain the count.
 
 clientId = "";
 chatChannelName = "";
 chatChannelDescription = "";
-
-// -----------------------------------------------------------------------------
-function activateChatBox() {
-    $("#message").removeAttr("disabled");
-    //
-    $("#btn-createChatClient").click(function () {
-        createChatClient();
-    });
-    $("#btn-join").click(function () {
-        joinChatChannel();
-    });
-    $("#btn-list").click(function () {
-        listChannels();
-    });
-    $("#btn-delete").click(function () {
-        deleteChannel();
-    });
-    $("#btn-members").click(function () {
-        listMembers();
-    });
-    $("#btn-count").click(function () {
-        doCount();
-    });
-    // --------------------------------
-    $("#btn-chat").click(function () {
-        if (thisChatClient === "") {
-            addChatMessage("First, create a Chat Client.");
-            return;
-        }
-        const message = $("#message").val();
-        if (message === "") {
-            return;
-        }
-        $("#message").val("");
-        thisChannel.sendMessage(message);
-    });
-    $("#message").on("keydown", function (e) {
-        if (e.keyCode === 13) {
-            $("#btn-chat").click();
-        }
-    });
-    // --------------------------------
-}
-
-// -----------------------------------------------------------------------------
-function listMembers() {
-    logger("+ Called: listMembers().");
-    var members = thisChannel.getMembers();
-    addChatMessage("+ -----------------------");
-    addChatMessage("+ Members of this channel:");
-    members.then(function (currentMembers) {
-        currentMembers.forEach(function (member) {
-            if (member.lastConsumedMessageIndex !== null) {
-                addChatMessage("++ " + member.identity + ", Last Consumed Message Index = " + member.lastConsumedMessageIndex);
-            } else {
-                addChatMessage("++ " + member.identity);
-            }
-        });
-    });
-}
-
-function doCount() {
-    logger("+ Called: doCount().");
-    thisChannel.getMessages().then(function (messages) {
-        const totalMessages = messages.items.length;
-        logger('Total Messages:' + totalMessages);
-        addChatMessage("+ -----------------------");
-        addChatMessage("+ All current messages:");
-        for (i = 0; i < totalMessages; i++) {
-            const message = messages.items[i];
-            addChatMessage("> " + message.author + " : " + message.body);
-        }
-        thisChannel.updateLastConsumedMessageIndex(totalMessages);
-    });
-}
 
 // -----------------------------------------------------------------------------
 function createChatClient() {
@@ -108,6 +34,7 @@ function createChatClient() {
             addChatMessage("+ Chat client created for the user: " + clientId);
             thisChatClient.getSubscribedChannels();
             // thisChatClient.getSubscribedChannels().then(joinChatChannel);
+            setButtons("createChatClient");
         });
     }).fail(function () {
         logger("- Error refreshing the token.");
@@ -229,11 +156,13 @@ function joinChannel() {
     thisChannel.join().then(function (channel) {
         logger('Joined channel as ' + clientId);
         addChatMessage("+++ Channel joined. You can start chatting.");
+        setButtons("join");
     }).catch(function (err) {
         // - Join failed: myChannel3, t: Member already exists
         if (err.message === "Member already exists") {
             // - Join failed: t: Member already exists
             addChatMessage("++ You already exist in the channel.");
+            setButtons("join");
         } else {
             logger("- Join failed: " + thisChannel.uniqueName + ' :' + err.message + ":");
             addChatMessage("- Join failed: " + err.message);
@@ -257,7 +186,48 @@ function joinChannel() {
 }
 
 function onMessageAdded(message) {
-    addChatMessage("> " + message.author + " : " + message.body);
+    addChatMessage("> " + message.author + " : " + message.channel.uniqueName + " : " + message.body);
+    incCount();
+}
+
+// -----------------------------------------------------------------------------
+function listMembers() {
+    // logger("+ Called: listMembers().");
+    var members = thisChannel.getMembers();
+    addChatMessage("+ -----------------------");
+    addChatMessage("+ Members of this channel: " + thisChannel.uniqueName);
+    members.then(function (currentMembers) {
+        currentMembers.forEach(function (member) {
+            if (member.lastConsumedMessageIndex !== null) {
+                addChatMessage("++ " + member.identity + ", Last Consumed Message Index = " + member.lastConsumedMessageIndex);
+            } else {
+                addChatMessage("++ " + member.identity);
+            }
+        });
+    });
+}
+
+function doCount() {
+    // logger("+ Called: doCount().");
+    thisChannel.getMessages().then(function (messages) {
+        totalMessages = messages.items.length;
+        logger('Total Messages:' + totalMessages);
+        addChatMessage("+ -----------------------");
+        addChatMessage("+ All current messages:");
+        for (i = 0; i < totalMessages; i++) {
+            const message = messages.items[i];
+            addChatMessage("> " + message.author + " : " + message.body);
+        }
+        thisChannel.updateLastConsumedMessageIndex(totalMessages);
+    });
+}
+
+function incCount() {
+    totalMessages++;
+    logger('+ Increment Total Messages:' + totalMessages);
+    thisChannel.getMessages().then(function (messages) {
+        thisChannel.updateLastConsumedMessageIndex(totalMessages);
+    });
 }
 
 // -----------------------------------------------------------------------------
@@ -287,6 +257,90 @@ window.onclick = function (e) {
 }
 
 // -----------------------------------------------------------------------------
+function activateChatBox() {
+    $("#message").removeAttr("disabled");
+    //
+    $("#btn-createChatClient").click(function () {
+        createChatClient();
+    });
+    $("#btn-join").click(function () {
+        joinChatChannel();
+    });
+    $("#btn-list").click(function () {
+        listChannels();
+    });
+    $("#btn-delete").click(function () {
+        deleteChannel();
+    });
+    $("#btn-members").click(function () {
+        listMembers();
+    });
+    $("#btn-count").click(function () {
+        doCount();
+    });
+    // --------------------------------
+    $("#btn-chat").click(function () {
+        if (thisChatClient === "") {
+            addChatMessage("First, create a Chat Client.");
+            return;
+        }
+        const message = $("#message").val();
+        if (message === "") {
+            return;
+        }
+        $("#message").val("");
+        thisChannel.sendMessage(message);
+        incCount();
+    });
+    $("#message").on("keydown", function (e) {
+        if (e.keyCode === 13) {
+            $("#btn-chat").click();
+        }
+    });
+    // --------------------------------
+}
+
+function setButtons(activity) {
+    logger("setButtons, activity: " + activity);
+    // $("div.callMessages").html("Activity: " + activity);
+    switch (activity) {
+        case "init":
+            $('#btn-createChatClient').prop('disabled', false);
+            //
+            $('#btn-list').prop('disabled', true);
+            $('#btn-join').prop('disabled', true);
+            //
+            $('#btn-delete').prop('disabled', true);
+            $('#btn-chat').prop('disabled', true);
+            $('#btn-members').prop('disabled', true);
+            $('#btn-count').prop('disabled', true);
+            break;
+        case "createChatClient":
+            $('#btn-createChatClient').prop('disabled', true);
+            //
+            $('#btn-list').prop('disabled', false);
+            $('#btn-join').prop('disabled', false);
+            //
+            $('#btn-delete').prop('disabled', false);
+            $('#btn-chat').prop('disabled', true);
+            $('#btn-members').prop('disabled', true);
+            $('#btn-count').prop('disabled', true);
+            break;
+        case "join":
+            $('#btn-createChatClient').prop('disabled', false);
+            //
+            $('#btn-list').prop('disabled', false);
+            $('#btn-join').prop('disabled', false);
+            //
+            $('#btn-delete').prop('disabled', false);
+            $('#btn-chat').prop('disabled', false);
+            $('#btn-members').prop('disabled', false);
+            $('#btn-count').prop('disabled', false);
+            break;
+    }
+}
+
+// -----------------------------------------------------------------------------
 function logger(message) {
     var aTextarea = document.getElementById('log');
     aTextarea.value += "\n> " + message;
@@ -306,6 +360,7 @@ window.onload = function () {
     chatMessages.value = "+++ Ready to Create Chat Client, then join a chat channel and chat.";
     // createChatClient();
     activateChatBox();
+    setButtons("init");
 };
 
 // -----------------------------------------------------------------------------
