@@ -24,6 +24,12 @@ function activateChatBox() {
     $("#btn-delete").click(function () {
         deleteChannel();
     });
+    $("#btn-members").click(function () {
+        listMembers();
+    });
+    $("#btn-count").click(function () {
+        doCount();
+    });
     // --------------------------------
     $("#btn-chat").click(function () {
         if (thisChatClient === "") {
@@ -43,6 +49,38 @@ function activateChatBox() {
         }
     });
     // --------------------------------
+}
+
+// -----------------------------------------------------------------------------
+function listMembers() {
+    logger("+ Called: listMembers().");
+    var members = thisChannel.getMembers();
+    addChatMessage("+ -----------------------");
+    addChatMessage("+ Members of this channel:");
+    members.then(function (currentMembers) {
+        currentMembers.forEach(function (member) {
+            if (member.lastConsumedMessageIndex !== null) {
+                addChatMessage("++ " + member.identity + ", Last Consumed Message Index = " + member.lastConsumedMessageIndex);
+            } else {
+                addChatMessage("++ " + member.identity);
+            }
+        });
+    });
+}
+
+function doCount() {
+    logger("+ Called: doCount().");
+    thisChannel.getMessages().then(function (messages) {
+        const totalMessages = messages.items.length;
+        logger('Total Messages:' + totalMessages);
+        addChatMessage("+ -----------------------");
+        addChatMessage("+ All current messages:");
+        for (i = 0; i < totalMessages; i++) {
+            const message = messages.items[i];
+            addChatMessage("> " + message.author + " : " + message.body);
+        }
+        thisChannel.updateLastConsumedMessageIndex(totalMessages);
+    });
 }
 
 // -----------------------------------------------------------------------------
