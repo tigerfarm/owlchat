@@ -1,5 +1,11 @@
 // -----------------------------------------------------------------------------
+// Documentation:      https://www.twilio.com/docs/chat/initializing-sdk-clients
+// Documentation:      https://www.twilio.com/docs/chat/channels
+// Documentation:      https://www.twilio.com/docs/chat/rest/channels
+// Server side delete: https://www.twilio.com/docs/chat/rest/channels
+// Message properties: https://www.twilio.com/docs/chat/rest/messages
 
+// -----------------------------------------------------------------------------
 let thisChatClient = "";
 let thisChannel;
 let thisToken;
@@ -23,10 +29,8 @@ function createChatClient() {
     logger("Refresh the token using client id: " + clientId);
     var jqxhr = $.get("clientTokenGet.php?clientid=" + clientId, function (token) {
         thisToken = token;
-        // logger("thisToken 1:" + thisToken + ":");
         logger("Token refreshed.");
         // -------------------------------
-        // Documentation: https://www.twilio.com/docs/chat/initializing-sdk-clients
         // I would need to make change to get this to work: thisChatClient = new Twilio.Chat.Client.create(token);
         Twilio.Chat.Client.create(token).then(chatClient => {
             thisChatClient = chatClient;
@@ -49,12 +53,10 @@ function listChannels() {
         return;
     }
     chatChannelName = $("#channelName").val();
-    // Documenation: https://www.twilio.com/docs/chat/channels
     addChatMessage("+ List of public channels (+ uniqueName: friendlyName):");
     thisChatClient.getPublicChannelDescriptors().then(function (paginator) {
         for (i = 0; i < paginator.items.length; i++) {
             const channel = paginator.items[i];
-            // Doc: https://www.twilio.com/docs/chat/rest/channels
             let listString = '++ ' + channel.uniqueName + ": " + channel.friendlyName + ": " + channel.createdBy;
             if (channel.uniqueName === chatChannelName) {
                 listString += " *";
@@ -87,7 +89,6 @@ function deleteChannel() {
                 }).catch(function (err) {
                     if (thisChannel.createdBy !== clientId) {
                         addChatMessage("- Can only be deleted by the creator: " + thisChannel.createdBy);
-                        // Server side delete: https://www.twilio.com/docs/chat/rest/channels
                     } else {
                         logger("- Delete failed: " + thisChannel.uniqueName + ', ' + err);
                         addChatMessage("- Delete failed: " + err);
@@ -119,7 +120,6 @@ function joinChatChannel() {
                 thisChannel = channel;
                 logger("Channel exists: " + chatChannelName + " : " + thisChannel);
                 joinChannel();
-                //
                 logger("+ Channel Attributes: "
                         // + channel.getAttributes()
                         + " SID: " + channel.sid
@@ -205,10 +205,11 @@ function listMembers() {
             }
         });
     });
+    addChatMessage("++ getUnconsumedMessagesCount = " + thisChannel.getUnconsumedMessagesCount);
 }
 
-function doCount() {
-    // logger("+ Called: doCount().");
+function listAllMessages() {
+    // logger("+ Called: listAllMessages().");
     thisChannel.getMessages().then(function (messages) {
         totalMessages = messages.items.length;
         logger('Total Messages:' + totalMessages);
@@ -216,10 +217,16 @@ function doCount() {
         addChatMessage("+ All current messages:");
         for (i = 0; i < totalMessages; i++) {
             const message = messages.items[i];
+            // properties: https://media.twiliocdn.com/sdk/js/chat/releases/3.2.1/docs/Message.html
             addChatMessage("> " + message.author + " : " + message.body);
         }
         thisChannel.updateLastConsumedMessageIndex(totalMessages);
     });
+}
+
+function doCountZero() {
+    logger("+ Called: doCountZero(): thisChannel.setNoMessagesConsumed();");
+    thisChannel.setNoMessagesConsumed();
 }
 
 function incCount() {
@@ -275,8 +282,11 @@ function activateChatBox() {
     $("#btn-members").click(function () {
         listMembers();
     });
-    $("#btn-count").click(function () {
-        doCount();
+    $("#btn-listallmessages").click(function () {
+        listAllMessages();
+    });
+    $("#btn-countzero").click(function () {
+        doCountZero();
     });
     // --------------------------------
     $("#btn-chat").click(function () {
@@ -290,7 +300,6 @@ function activateChatBox() {
         }
         $("#message").val("");
         thisChannel.sendMessage(message);
-        incCount();
     });
     $("#message").on("keydown", function (e) {
         if (e.keyCode === 13) {
@@ -314,6 +323,7 @@ function setButtons(activity) {
             $('#btn-chat').prop('disabled', true);
             $('#btn-members').prop('disabled', true);
             $('#btn-count').prop('disabled', true);
+            $('#btn-countzero').prop('disabled', true);
             break;
         case "createChatClient":
             $('#btn-createChatClient').prop('disabled', true);
@@ -325,6 +335,7 @@ function setButtons(activity) {
             $('#btn-chat').prop('disabled', true);
             $('#btn-members').prop('disabled', true);
             $('#btn-count').prop('disabled', true);
+            $('#btn-countzero').prop('disabled', true);
             break;
         case "join":
             $('#btn-createChatClient').prop('disabled', false);
@@ -336,6 +347,7 @@ function setButtons(activity) {
             $('#btn-chat').prop('disabled', false);
             $('#btn-members').prop('disabled', false);
             $('#btn-count').prop('disabled', false);
+            $('#btn-countzero').prop('disabled', false);
             break;
     }
 }

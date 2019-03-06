@@ -116,11 +116,20 @@ select option {
 }
 
 .abutton {
-    width: 83px;
+    width: 76px;
     height: 40px;
     border-radius: 9px;
     color: white;
     background-color: #954C08;
+    font: Helvetica,Arial,sans-serif;
+    font-size: 0.8em; 
+}
+.abutton:disabled {
+    width: 76px;
+    height: 40px;
+    border-radius: 9px;
+    color: white;
+    background-color: #cccccc;
     font: Helvetica,Arial,sans-serif;
     font-size: 0.8em; 
 }
@@ -136,15 +145,6 @@ select option {
     background-color: gray;
     border-color: #2a65a0;
     border-bottom-color: #3884CF;
-}
-.abutton:disabled {
-    width: 83px;
-    height: 40px;
-    border-radius: 9px;
-    color: white;
-    background-color: #cccccc;
-    font: Helvetica,Arial,sans-serif;
-    font-size: 0.8em; 
 }
 
 /* overrides extra padding on button elements in Firefox */

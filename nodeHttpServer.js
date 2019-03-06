@@ -18,6 +18,9 @@ console.log("+ tokenHost :" + tokenHost + ":");
 
 http.createServer(function (request, response) {
 
+    // console.log("+ request data: " + request.method + " " + request.headers.host);
+    // console.log("+ request.headers: " + JSON.stringify(request.headers));
+    
     var uri = url.parse(request.url).pathname;
     var filename = path.join(process.cwd(), uri);
     fs.exists(filename, function (exists) {
