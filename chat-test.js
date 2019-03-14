@@ -27,7 +27,7 @@ function createChatClient() {
     // Since, programs cannot make an Ajax call to a remote resource,
     // Need to do an Ajax call to a local program that goes and gets the token.
     logger("Refresh the token using client id: " + clientId);
-    var jqxhr = $.get("clientTokenGet.php?clientid=" + clientId, function (token) {
+    var jqxhr = $.get("clientTokenGet.php?cliendId=" + clientId, function (token) {
         thisToken = token;
         logger("Token refreshed: " + thisToken);
         // -------------------------------
