@@ -186,7 +186,9 @@ function joinChannel() {
 }
 
 function onMessageAdded(message) {
-    addChatMessage("> " + message.author + " : " + message.channel.uniqueName + " : " + message.body);
+    // addChatMessage("> " + message.author + " : " + message.channel.uniqueName + " : " + message.body);
+    addChatMessage("> " + message.sid + " : "+ message.author + " : "+ message.friendlyName
+            + " : " + message.channel.uniqueName + " : " + message.body);
     incCount();
 }
 
@@ -205,14 +207,21 @@ function listMembers() {
             }
         });
     });
-    addChatMessage("++ getUnconsumedMessagesCount = " + thisChannel.getUnconsumedMessagesCount);
+    // Not working: addChatMessage("++ getUnconsumedMessagesCount = " + thisChannel.getUnconsumedMessagesCount);
+}
+
+function setTotalMessages() {
+    thisChannel.getMessages().then(function (messages) {
+        totalMessages = messages.items.length;
+        logger('setTotalMessages, Total Messages:' + totalMessages);
+    });
 }
 
 function listAllMessages() {
     // logger("+ Called: listAllMessages().");
     thisChannel.getMessages().then(function (messages) {
         totalMessages = messages.items.length;
-        logger('Total Messages:' + totalMessages);
+        logger('Total Messages: ' + totalMessages);
         addChatMessage("+ -----------------------");
         addChatMessage("+ All current messages:");
         for (i = 0; i < totalMessages; i++) {
@@ -221,6 +230,7 @@ function listAllMessages() {
             addChatMessage("> " + message.author + " : " + message.body);
         }
         thisChannel.updateLastConsumedMessageIndex(totalMessages);
+        addChatMessage('+ Total Messages: ' + totalMessages);
     });
 }
 
@@ -324,6 +334,7 @@ function setButtons(activity) {
             $('#btn-members').prop('disabled', true);
             $('#btn-count').prop('disabled', true);
             $('#btn-countzero').prop('disabled', true);
+            $('#btn-listallmessages').prop('disabled', true);
             break;
         case "createChatClient":
             $('#btn-createChatClient').prop('disabled', true);
@@ -336,6 +347,7 @@ function setButtons(activity) {
             $('#btn-members').prop('disabled', true);
             $('#btn-count').prop('disabled', true);
             $('#btn-countzero').prop('disabled', true);
+            $('#btn-listallmessages').prop('disabled', true);
             break;
         case "join":
             $('#btn-createChatClient').prop('disabled', false);
@@ -348,6 +360,7 @@ function setButtons(activity) {
             $('#btn-members').prop('disabled', false);
             $('#btn-count').prop('disabled', false);
             $('#btn-countzero').prop('disabled', false);
+            $('#btn-listallmessages').prop('disabled', false);
             break;
     }
 }
