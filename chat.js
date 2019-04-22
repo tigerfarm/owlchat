@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------------
 // Documentation:      https://www.twilio.com/docs/chat/initializing-sdk-clients
-// Documentation:      https://www.twilio.com/docs/chat/channels
+// Documentation:      https://www.twilio.com/docs/chat/channelstotalMessages
 // Documentation:      https://www.twilio.com/docs/chat/rest/channels
 // Server side delete: https://www.twilio.com/docs/chat/rest/channels
 // Message properties: https://www.twilio.com/docs/chat/rest/messages
