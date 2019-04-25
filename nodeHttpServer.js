@@ -29,7 +29,7 @@ http.createServer(function (request, response) {
         // ---------------------------------------------------------------------
         if (uri === "/clientTokenGet.php") {
             console.log("++ Get Client token.");
-            // request.url: /clientTokenGet.php?clientid=owluser
+            // request.url: /clientTokenGet.php?identity=owluser
             theParam = request.url.substring(request.url.indexOf("?"));
             console.log("+ theParam :" + theParam + ":");
             //

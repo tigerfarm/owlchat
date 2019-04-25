@@ -12,7 +12,7 @@ if ($tokenHost == "") {
         return;
     }
 }
-$tokenClientId = htmlspecialchars($_GET["clientid"]);
+$tokenClientId = htmlspecialchars($_GET["identity"]);
 if ($tokenClientId == "") {
     $tokenClientId = getenv('CLIENT_ID');
     if ($tokenClientId == "") {

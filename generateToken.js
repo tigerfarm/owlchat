@@ -4,7 +4,7 @@ exports.handler = function(context, event, callback) {
     let AccessToken = Twilio.jwt.AccessToken;
     //
     // The Client using tokens from this Function, receive calls made to this client ID.
-    let clientid = event.clientid || null;
+    let clientid = event.identity || null;
     if (clientid === null) {
         clientid = context.CLIENT_ID || null;
         if (clientid === null) {
