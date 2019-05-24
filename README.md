@@ -1,4 +1,4 @@
-# Tiger Farm Press Chat Application
+# Chat Application
 
 If you would like an Heroku account to deploy and use this web application,
 go to this [link (https://heroku.com)](https://heroku.com) and you can Sign up for free, and use it for free.
@@ -18,7 +18,7 @@ You can view your Your Runtime Domain from here:
 https://www.twilio.com/console/runtime/overview
 ````
 
-Tiger Farm Press Chat Screen print:
+Chat Screen print:
 
 <img src="Tiger_Chat.jpg"/>
 
